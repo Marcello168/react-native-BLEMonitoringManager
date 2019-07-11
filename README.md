@@ -1,6 +1,6 @@
 # react-native-BLEMonitoringManager
 
-### 深圳市昇润科技有限公司 React native   蓝牙SDK
+### DLC  迪尔西  React native   蓝牙SDK
 
 #### 注意事项 iOS
 ---
