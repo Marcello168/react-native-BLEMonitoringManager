@@ -1,0 +1,22 @@
+{
+  "name": "react-native-blemonitoringmanager",
+  "version": "1.0.0",
+  "description": "DLC  蓝牙工具",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Marcello168/react-native-BLEMonitoringManager.git"
+  },
+  "keywords": [
+    "蓝牙工具","DLC"
+  ],
+  "author": "Marcello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Marcello168/react-native-BLEMonitoringManager/issues"
+  },
+  "homepage": "https://github.com/Marcello168/react-native-BLEMonitoringManager#readme"
+}
