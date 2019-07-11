@@ -9,10 +9,9 @@
 /* Begin PBXBuildFile section */
 		BBBD997722D5B99B00F074AF /* BLEMonitoringManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */; };
 		BBBD997822D5B99B00F074AF /* BLEMonitoringManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */; };
-		BBBD99F922D5C23D00F074AF /* libBLEManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD99F322D5C23C00F074AF /* libBLEManager.a */; };
-		BBBD99FA22D5C23D00F074AF /* DeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBD99F822D5C23C00F074AF /* DeviceInfo.m */; };
 		BBBD99FD22D5C2D400F074AF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD99FC22D5C2D400F074AF /* CoreBluetooth.framework */; };
-		BBBD99FE22D5C40400F074AF /* BLEManager.h in Sources */ = {isa = PBXBuildFile; fileRef = BBBD99F622D5C23C00F074AF /* BLEManager.h */; };
+		BBC6886D22D6D93900EFCEE9 /* libBLEManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBC6886722D6D93900EFCEE9 /* libBLEManager.a */; };
+		BBC6886E22D6D93900EFCEE9 /* DeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC6886C22D6D93900EFCEE9 /* DeviceInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,13 +31,13 @@
 		BBBD997222D5B99B00F074AF /* libBLEMonitoringManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBLEMonitoringManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BLEMonitoringManager.h; sourceTree = "<group>"; };
 		BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLEMonitoringManager.m; sourceTree = "<group>"; };
-		BBBD99F322D5C23C00F074AF /* libBLEManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBLEManager.a; sourceTree = "<group>"; };
-		BBBD99F422D5C23C00F074AF /* BLEManager_Version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BLEManager_Version; sourceTree = "<group>"; };
-		BBBD99F522D5C23C00F074AF /* DeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfo.h; sourceTree = "<group>"; };
-		BBBD99F622D5C23C00F074AF /* BLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEManager.h; sourceTree = "<group>"; };
-		BBBD99F722D5C23C00F074AF /* oad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oad.h; sourceTree = "<group>"; };
-		BBBD99F822D5C23C00F074AF /* DeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfo.m; sourceTree = "<group>"; };
 		BBBD99FC22D5C2D400F074AF /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		BBC6886722D6D93900EFCEE9 /* libBLEManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBLEManager.a; sourceTree = "<group>"; };
+		BBC6886822D6D93900EFCEE9 /* BLEManager_Version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BLEManager_Version; sourceTree = "<group>"; };
+		BBC6886922D6D93900EFCEE9 /* DeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfo.h; sourceTree = "<group>"; };
+		BBC6886A22D6D93900EFCEE9 /* BLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEManager.h; sourceTree = "<group>"; };
+		BBC6886B22D6D93900EFCEE9 /* oad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oad.h; sourceTree = "<group>"; };
+		BBC6886C22D6D93900EFCEE9 /* DeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +46,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBBD99FD22D5C2D400F074AF /* CoreBluetooth.framework in Frameworks */,
-				BBBD99F922D5C23D00F074AF /* libBLEManager.a in Frameworks */,
+				BBC6886D22D6D93900EFCEE9 /* libBLEManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,24 +73,11 @@
 		BBBD997422D5B99B00F074AF /* BLEMonitoringManager */ = {
 			isa = PBXGroup;
 			children = (
-				BBBD99F222D5C23C00F074AF /* BLEManager */,
+				BBC6886622D6D93900EFCEE9 /* BLEManager */,
 				BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */,
 				BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */,
 			);
 			path = BLEMonitoringManager;
-			sourceTree = "<group>";
-		};
-		BBBD99F222D5C23C00F074AF /* BLEManager */ = {
-			isa = PBXGroup;
-			children = (
-				BBBD99F322D5C23C00F074AF /* libBLEManager.a */,
-				BBBD99F422D5C23C00F074AF /* BLEManager_Version */,
-				BBBD99F522D5C23C00F074AF /* DeviceInfo.h */,
-				BBBD99F622D5C23C00F074AF /* BLEManager.h */,
-				BBBD99F722D5C23C00F074AF /* oad.h */,
-				BBBD99F822D5C23C00F074AF /* DeviceInfo.m */,
-			);
-			path = BLEManager;
 			sourceTree = "<group>";
 		};
 		BBBD99FB22D5C2D300F074AF /* Frameworks */ = {
@@ -100,6 +86,19 @@
 				BBBD99FC22D5C2D400F074AF /* CoreBluetooth.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BBC6886622D6D93900EFCEE9 /* BLEManager */ = {
+			isa = PBXGroup;
+			children = (
+				BBC6886722D6D93900EFCEE9 /* libBLEManager.a */,
+				BBC6886822D6D93900EFCEE9 /* BLEManager_Version */,
+				BBC6886922D6D93900EFCEE9 /* DeviceInfo.h */,
+				BBC6886A22D6D93900EFCEE9 /* BLEManager.h */,
+				BBC6886B22D6D93900EFCEE9 /* oad.h */,
+				BBC6886C22D6D93900EFCEE9 /* DeviceInfo.m */,
+			);
+			path = BLEManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,9 +157,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBBD99FE22D5C40400F074AF /* BLEManager.h in Sources */,
 				BBBD997722D5B99B00F074AF /* BLEMonitoringManager.m in Sources */,
-				BBBD99FA22D5C23D00F074AF /* DeviceInfo.m in Sources */,
+				BBC6886E22D6D93900EFCEE9 /* DeviceInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

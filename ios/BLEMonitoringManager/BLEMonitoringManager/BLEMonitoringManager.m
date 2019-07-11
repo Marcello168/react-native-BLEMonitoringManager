@@ -24,8 +24,14 @@ RCT_EXPORT_METHOD(shareBLEMonitoringManager){
     BLEManager * manager = [BLEManager defaultManager];
     manager.delegate = self;
     self.bleManager = manager;
+    
 }
 
+RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
+    RCTLogInfo(@"%@: %@", name, info);
+    [self.bleManager scanDeviceTime:3.0];
+
+}
 
 /*************BLEManagerDelegate代理回调*****************/
 
@@ -33,10 +39,10 @@ RCT_EXPORT_METHOD(shareBLEMonitoringManager){
 // *  控制中心状态回调
 // *
 // */
-//- (void)centerManagerStateChange:(CBCentralManager *)center{
-//    NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-//
-//}
+- (void)centerManagerStateChange:(CBCentralManager *)center{
+    NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+
+}
 
 
 /**

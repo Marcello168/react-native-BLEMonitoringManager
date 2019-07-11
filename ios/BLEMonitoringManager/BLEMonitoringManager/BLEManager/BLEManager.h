@@ -414,6 +414,8 @@ typedef NS_ENUM (NSInteger, BaudRate_2541_Type) {
 
 - (void)bleManagerPeripheral:(CBPeripheral *)peripheral writeValueBytes:(Byte *)byte byteLength:(NSUInteger)length serviceUUID:(UInt16)serviceUUID characteruisticUUID:(UInt16)characteruisticUUID encryption:(BOOL)encryption response:(BOOL)response;
 
+- (void)bleManagerPeripheral:(CBPeripheral *)peripheral writeValueData:(NSData *)data serviceUUID:(UInt16)serviceUUID characteruisticUUID:(UInt16)characteruisticUUID encryption:(BOOL)encryption response:(BOOL)response;
+
 /**
  *  设置设备notify状态
  *
