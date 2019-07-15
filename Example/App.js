@@ -8,7 +8,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, NativeModules, PermissionsAndroid } from 'react-native';
+import { Platform, StyleSheet, Text, View, NativeModules, PermissionsAndroid, DeviceEventEmitter } from 'react-native';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -19,9 +19,19 @@ type Props = {};
 export default class App extends Component<Props> {
     componentDidMount = () => {
         console.log('object :', NativeModules);
+        NativeModules.BLEMonitoringManager.shareBLEMonitoringManager();
 
         this.requestLocationPermission();
-        NativeModules.BLEMonitoringManager.shareBLEMonitoringManager();
+
+        DeviceEventEmitter.addListener('ScanDeviceListResult', (devcieList) => {
+            // handle event.
+            console.log('扫描到的设备 :', devcieList);
+        });
+
+        DeviceEventEmitter.addListener('Monitoringttitudeata', (commandData) => {
+            // handle event.
+            console.log('监测到数据更新 :', commandData);
+        });
     };
 
     async requestLocationPermission() {
@@ -34,10 +44,6 @@ export default class App extends Component<Props> {
 
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 // this.show('你已获取了地址查询权限');
-                NativeModules.BLEMonitoringManager.testPrint('Jack', {
-                    height: '1.78m',
-                    weight: '7kg'
-                });
             } else {
                 // this.show('获取地址查询失败');
             }
@@ -53,13 +59,77 @@ export default class App extends Component<Props> {
                     style={styles.welcome}
                     onPress={() => {
                         console.log('开始搜索 :');
-                        NativeModules.BLEMonitoringManager.testPrint('Jack', {
-                            height: '1.78m',
-                            weight: '7kg'
-                        });
+                        NativeModules.BLEMonitoringManager.startScanDevice();
                     }}
                 >
-                    Welcome to React Native!
+                    开始搜索
+                </Text>
+
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        console.log('开始链接 :');
+                        NativeModules.BLEMonitoringManager.connectDevice('F0:F8:F2:EF:13:02');
+                    }}
+                >
+                    开始链接
+                </Text>
+
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        console.log('发送 :');
+                        let command1 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x03, 0xbc ];
+                        let command2 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x00, 0x03, 0xab ];
+                        let command3 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x00, 0xbf ];
+                        let command4 = [ 0x5a, 0xa5, 0x01, 0x40, 0xbe ];
+
+                        NativeModules.BLEMonitoringManager.sendDataToDevice(command1);
+                    }}
+                >
+                    发送数据1
+                </Text>
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        console.log('发送 :');
+                        let command1 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x03, 0xbc ];
+                        let command2 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x00, 0x03, 0xab ];
+                        let command3 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x00, 0xbf ];
+                        let command4 = [ 0x5a, 0xa5, 0x01, 0x40, 0xbe ];
+
+                        NativeModules.BLEMonitoringManager.sendDataToDevice(command2);
+                    }}
+                >
+                    发送数据2
+                </Text>
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        console.log('发送 :');
+                        let command1 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x03, 0xbc ];
+                        let command2 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x00, 0x03, 0xab ];
+                        let command3 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x00, 0xbf ];
+                        let command4 = [ 0x5a, 0xa5, 0x01, 0x40, 0xbe ];
+
+                        NativeModules.BLEMonitoringManager.sendDataToDevice(command3);
+                    }}
+                >
+                    发送数据3
+                </Text>
+                <Text
+                    style={styles.welcome}
+                    onPress={() => {
+                        console.log('发送 :');
+                        let command1 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x03, 0xbc ];
+                        let command2 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x00, 0x03, 0xa8 ];
+                        let command3 = [ 0x5a, 0xa5, 0x04, 0x50, 0x00, 0x14, 0x00, 0xbf ];
+                        let command4 = [ 0x5a, 0xa5, 0x01, 0x40, 0xbe ];
+
+                        NativeModules.BLEMonitoringManager.sendDataToDevice(command4);
+                    }}
+                >
+                    发送数据4
                 </Text>
                 <Text style={styles.instructions}>To get started, edit App.js</Text>
                 <Text style={styles.instructions}>{instructions}</Text>

@@ -1,6 +1,6 @@
 {
   "name": "react-native-blemonitoringmanager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "DLC  蓝牙工具",
   "main": "index.js",
   "scripts": {
