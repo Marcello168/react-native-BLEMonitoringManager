@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridge.h>
 #import <React/RCTLog.h>
+#import <React/RCTEventEmitter.h>
 
-@interface BLEMonitoringManager : NSObject<RCTBridgeModule>
+
+@interface BLEMonitoringManager : RCTEventEmitter
 
 @end

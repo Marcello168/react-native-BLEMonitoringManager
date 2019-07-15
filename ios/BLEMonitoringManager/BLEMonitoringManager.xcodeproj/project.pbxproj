@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB1FA06A22DC75AC00ABCA2F /* DataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1FA06922DC75AB00ABCA2F /* DataTool.m */; };
 		BBBD997722D5B99B00F074AF /* BLEMonitoringManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */; };
 		BBBD997822D5B99B00F074AF /* BLEMonitoringManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */; };
 		BBBD99FD22D5C2D400F074AF /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD99FC22D5C2D400F074AF /* CoreBluetooth.framework */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB1FA06822DC75AB00ABCA2F /* DataTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataTool.h; sourceTree = "<group>"; };
+		BB1FA06922DC75AB00ABCA2F /* DataTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataTool.m; sourceTree = "<group>"; };
 		BBBD997222D5B99B00F074AF /* libBLEMonitoringManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBLEMonitoringManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BLEMonitoringManager.h; sourceTree = "<group>"; };
 		BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLEMonitoringManager.m; sourceTree = "<group>"; };
@@ -76,6 +79,8 @@
 				BBC6886622D6D93900EFCEE9 /* BLEManager */,
 				BBBD997522D5B99B00F074AF /* BLEMonitoringManager.h */,
 				BBBD997622D5B99B00F074AF /* BLEMonitoringManager.m */,
+				BB1FA06822DC75AB00ABCA2F /* DataTool.h */,
+				BB1FA06922DC75AB00ABCA2F /* DataTool.m */,
 			);
 			path = BLEMonitoringManager;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBBD997722D5B99B00F074AF /* BLEMonitoringManager.m in Sources */,
+				BB1FA06A22DC75AC00ABCA2F /* DataTool.m in Sources */,
 				BBC6886E22D6D93900EFCEE9 /* DeviceInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,12 @@
 
 #import "BLEMonitoringManager.h"
 #import "BLEManager.h"
-@interface BLEMonitoringManager ()<BLEManagerDelegate>
+#import "DataTool.h"
+
+@interface BLEMonitoringManager ()<BLEManagerDelegate>{
+    NSMutableArray *_scanDevices;//扫描到的设备
+
+}
 
 /** 蓝牙单例 */
 @property (nonatomic, strong) BLEManager *bleManager;
@@ -19,8 +24,14 @@
 
 RCT_EXPORT_MODULE(BLEMonitoringManager);
 
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[@"ScanDeviceListResult",@"Monitoringttitudeata"];
+}
+
 RCT_EXPORT_METHOD(shareBLEMonitoringManager){
     RCTLogInfo(@"创建单例蓝牙");
+    _scanDevices = [NSMutableArray array];
     BLEManager * manager = [BLEManager defaultManager];
     manager.delegate = self;
     self.bleManager = manager;
@@ -32,6 +43,42 @@ RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
     [self.bleManager scanDeviceTime:3.0];
 
 }
+
+/***开始搜索设备**/
+RCT_EXPORT_METHOD(startScanDevice ) {
+    [self.bleManager scanDeviceTime:3.0];
+    
+}
+
+RCT_EXPORT_METHOD(connectDevice:(NSString *)macAddress) {
+    
+    DeviceInfo * connectDevcie = [self getReadyConectPeriphera:macAddress];
+    [self.bleManager connectToDevice:connectDevcie.cb];
+    
+}
+
+- (DeviceInfo *) getReadyConectPeriphera:(NSString *)macAddress{
+    NSLog(@"getReadyConectPeriphera");
+    DeviceInfo *device = nil ;
+    for (DeviceInfo  *scanDevice in _scanDevices) {
+        if ([scanDevice.macAddrss isEqualToString:macAddress]) {
+            device = scanDevice;
+            break;
+        }
+    }
+    
+    return device;
+}
+
+//发送数据NS啊
+RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
+    
+    NSString *str = [DataTool convertArrayToHexStr:commandArray];
+    NSLog(@"Send Hex Str -> %@", str);
+//    [self.bleManager scanDeviceTime:3.0];
+    
+}
+
 
 /*************BLEManagerDelegate代理回调*****************/
 
@@ -52,13 +99,28 @@ RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
  */
 - (void)scanDeviceRefrash:(NSMutableArray *)array{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+    for (DeviceInfo *info in array) {
+        if (![_scanDevices containsObject:info]) {
+            [_scanDevices addObject:info];
+        }
+    }
+    NSMutableArray *devcieArray = [NSMutableArray array];
+    for (DeviceInfo *deviceinfo in _scanDevices) {
+        NSDictionary *deviceDict = @{@"deviceName":deviceinfo.localName,@"deviceAddress":deviceinfo.macAddrss,@"deviceRSSI":@(deviceinfo.RSSI)};
+        [devcieArray addObject:deviceDict];
+    }
+    //处理数据后发给JS
+    [self sendEventWithName:@"ScanDeviceListResult" body:devcieArray];
 
 }
 
 - (void)bleManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+    
 
 }
+
+
 
 /**
  *  连接设备成功回调方法
@@ -71,6 +133,8 @@ RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
 
 }
 
+
+
 /**
  *  断开设备成功回调
  *
@@ -82,6 +146,8 @@ RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
 
 }
 
+
+
 /**
  *  收到数据回调方法(1002)
  *
@@ -90,8 +156,22 @@ RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
  */
 - (void)receiveDeviceDataSuccess_1:(NSData *)data device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+    NSString *hexStr =  [DataTool convertDataToHexStr:data];
+    NSLog(@"HexStr: = %@",hexStr);
+    Byte *commandByte = (Byte *)[data bytes];
+    NSMutableArray *commandArray = [NSMutableArray array];
+
+    for(int i=0;i<[data length];i++){
+      int cmd =  commandByte[i];
+        [commandArray addObject:@(cmd)];
+    }
+    //处理数据后发给JS
+    [self sendEventWithName:@"Monitoringttitudeata" body:commandArray];
+    NSLog(@"commandArray-> %@",commandArray);
 
 }
+
+
 
 /**
  *  收到数据回调方法(1003)
