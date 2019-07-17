@@ -51,8 +51,7 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     private static final String ScanDeviceListResult = "ScanDeviceListResult";//搜索到设备结果
     private static final String Monitoringttitudeata = "Monitoringttitudeata";//监测到数据变化
     private static final String BlueToothDisConnected = "BlueToothDisConnected";//设备断开链接
-
-
+    private static final String BlueToothConnectedSucess = "BlueToothConnectedSucess";//设备链接成功
 
     private static final String E_PICKER_CANCELLED = "E_PICKER_CANCELLED";
     private static final String E_FAILED_TO_SHOW_PICKER = "E_FAILED_TO_SHOW_PICKER";
@@ -155,7 +154,7 @@ commandByte[i] = (byte) commandData.getInt(i);
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
                 if (state == BluetoothAdapter.STATE_ON) {
-                    scanLeDevice(true);
+//                    scanLeDevice(true);
                     Log.i(TAG, "打开蓝牙 " + intent.getAction());
                 } else {
                     Log.i(TAG, "关闭蓝牙 " + intent.getAction());
@@ -168,7 +167,6 @@ commandByte[i] = (byte) commandData.getInt(i);
                         Log.i(TAG, "蓝牙 断线了 " + intent.getAction());
                         sendEvent(reactContextjava,BlueToothDisConnected,connectMacAddress);
 
-
                         break;
 
                     case LeProxy.ACTION_RSSI_AVAILABLE: {// 更新rssi
@@ -180,6 +178,8 @@ commandByte[i] = (byte) commandData.getInt(i);
                     case LeProxy.ACTION_GATT_CONNECTED: {// 更新rssi
                         Log.i(TAG, "蓝牙已连接 " + intent.getAction());//蓝牙连接后 马上停止扫描蓝牙
                         scanLeDevice(false);
+                        sendEvent(reactContextjava,BlueToothConnectedSucess,connectMacAddress);
+
                     }
                     break;
 

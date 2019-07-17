@@ -18,6 +18,9 @@
 /** 蓝牙单例 */
 @property (nonatomic, strong) BLEManager *bleManager;
 
+/** 连接的蓝牙设备 */
+@property (nonatomic, strong) DeviceInfo *connectDevice;
+
 @end
 
 @implementation BLEMonitoringManager
@@ -26,7 +29,7 @@ RCT_EXPORT_MODULE(BLEMonitoringManager);
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"ScanDeviceListResult",@"Monitoringttitudeata"];
+    return @[@"ScanDeviceListResult",@"Monitoringttitudeata",@"BlueToothDisConnected",@"BlueToothConnectedSucess"];
 }
 
 RCT_EXPORT_METHOD(shareBLEMonitoringManager){
@@ -53,6 +56,7 @@ RCT_EXPORT_METHOD(startScanDevice ) {
 RCT_EXPORT_METHOD(connectDevice:(NSString *)macAddress) {
     
     DeviceInfo * connectDevcie = [self getReadyConectPeriphera:macAddress];
+    self.connectDevice = connectDevcie;
     [self.bleManager connectToDevice:connectDevcie.cb];
     
 }
@@ -75,7 +79,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
     
     NSString *str = [DataTool convertArrayToHexStr:commandArray];
     NSLog(@"Send Hex Str -> %@", str);
-//    [self.bleManager scanDeviceTime:3.0];
+    [self.bleManager sendDataToDevice1:str device:self.connectDevice.macAddrss];
     
 }
 
@@ -130,6 +134,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)connectDeviceSuccess:(CBPeripheral *)device error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+    [self sendEventWithName:@"BlueToothConnectedSucess" body:self.connectDevice.macAddrss];
 
 }
 
@@ -143,7 +148,8 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)didDisconnectDevice:(CBPeripheral *)device error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    //处理数据后发给JS
+    [self sendEventWithName:@"BlueToothDisConnected" body:self.connectDevice];
 }
 
 

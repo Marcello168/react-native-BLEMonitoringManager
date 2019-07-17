@@ -38,7 +38,6 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		BBC6886522D6D84A00EFCEE9 /* libBLEMonitoringManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB521D9122D6D3970021EBF4 /* libBLEMonitoringManager.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
@@ -289,6 +288,13 @@
 			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
 			remoteInfo = RCTBlob;
 		};
+		BB20027C22DEAFE700C9F0D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB20027822DEAFE700C9F0D2 /* BLEMonitoringManager.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BBBD997222D5B99B00F074AF;
+			remoteInfo = BLEMonitoringManager;
+		};
 		BB521D8422D6D37D0021EBF4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -316,13 +322,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = ED296FEE214C9CF800B7C4FE;
 			remoteInfo = "jsiexecutor-tvOS";
-		};
-		BB521D9022D6D3970021EBF4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BB521D8C22D6D3970021EBF4 /* BLEMonitoringManager.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BBBD997222D5B99B00F074AF;
-			remoteInfo = BLEMonitoringManager;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -353,7 +352,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		BB521D8C22D6D3970021EBF4 /* BLEMonitoringManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BLEMonitoringManager.xcodeproj; path = ../../ios/BLEMonitoringManager/BLEMonitoringManager.xcodeproj; sourceTree = "<group>"; };
+		BB20027822DEAFE700C9F0D2 /* BLEMonitoringManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BLEMonitoringManager.xcodeproj; path = ../../ios/BLEMonitoringManager.xcodeproj; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FE52EC34F99E4623A8343F1F /* libBLEMonitoringManager.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBLEMonitoringManager.a; sourceTree = "<group>"; };
@@ -372,7 +371,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBC6886522D6D84A00EFCEE9 /* libBLEMonitoringManager.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -563,7 +561,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				BB521D8C22D6D3970021EBF4 /* BLEMonitoringManager.xcodeproj */,
+				BB20027822DEAFE700C9F0D2 /* BLEMonitoringManager.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -624,20 +622,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BB20027922DEAFE700C9F0D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB20027D22DEAFE700C9F0D2 /* libBLEMonitoringManager.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BB521D5E22D6D37A0021EBF4 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				FE52EC34F99E4623A8343F1F /* libBLEMonitoringManager.a */,
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		BB521D8D22D6D3970021EBF4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BB521D9122D6D3970021EBF4 /* libBLEMonitoringManager.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -756,8 +754,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = BB521D8D22D6D3970021EBF4 /* Products */;
-					ProjectRef = BB521D8C22D6D3970021EBF4 /* BLEMonitoringManager.xcodeproj */;
+					ProductGroup = BB20027922DEAFE700C9F0D2 /* Products */;
+					ProjectRef = BB20027822DEAFE700C9F0D2 /* BLEMonitoringManager.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -1050,6 +1048,13 @@
 			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		BB20027D22DEAFE700C9F0D2 /* libBLEMonitoringManager.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBLEMonitoringManager.a;
+			remoteRef = BB20027C22DEAFE700C9F0D2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		BB521D8522D6D37D0021EBF4 /* libjsi.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1076,13 +1081,6 @@
 			fileType = archive.ar;
 			path = "libjsiexecutor-tvOS.a";
 			remoteRef = BB521D8A22D6D37D0021EBF4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BB521D9122D6D3970021EBF4 /* libBLEMonitoringManager.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBLEMonitoringManager.a;
-			remoteRef = BB521D9022D6D3970021EBF4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
