@@ -50,6 +50,8 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     /*****************/
     private static final String ScanDeviceListResult = "ScanDeviceListResult";//搜索到设备结果
     private static final String Monitoringttitudeata = "Monitoringttitudeata";//监测到数据变化
+    private static final String BlueToothDisConnected = "BlueToothDisConnected";//设备断开链接
+
 
 
     private static final String E_PICKER_CANCELLED = "E_PICKER_CANCELLED";
@@ -89,6 +91,14 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableArray params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+    private void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           @Nullable String params) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
@@ -156,6 +166,8 @@ commandByte[i] = (byte) commandData.getInt(i);
 
                     case LeProxy.ACTION_GATT_DISCONNECTED:// 断线
                         Log.i(TAG, "蓝牙 断线了 " + intent.getAction());
+                        sendEvent(reactContextjava,BlueToothDisConnected,connectMacAddress);
+
 
                         break;
 

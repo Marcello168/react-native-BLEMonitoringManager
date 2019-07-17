@@ -22,16 +22,6 @@ export default class App extends Component<Props> {
         NativeModules.BLEMonitoringManager.shareBLEMonitoringManager();
 
         this.requestLocationPermission();
-
-        DeviceEventEmitter.addListener('ScanDeviceListResult', (devcieList) => {
-            // handle event.
-            console.log('扫描到的设备 :', devcieList);
-        });
-
-        DeviceEventEmitter.addListener('Monitoringttitudeata', (commandData) => {
-            // handle event.
-            console.log('监测到数据更新 :', commandData);
-        });
     };
 
     async requestLocationPermission() {
