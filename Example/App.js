@@ -19,9 +19,9 @@ type Props = {};
 export default class App extends Component<Props> {
     componentDidMount = () => {
         console.log('object :', NativeModules);
-        NativeModules.BLEMonitoringManager.shareBLEMonitoringManager();
+        // NativeModules.BLEMonitoringManager.shareBLEMonitoringManager();
 
-        this.requestLocationPermission();
+        // this.requestLocationPermission();
     };
 
     async requestLocationPermission() {

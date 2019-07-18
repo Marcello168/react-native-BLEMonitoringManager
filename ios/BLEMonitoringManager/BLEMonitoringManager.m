@@ -149,7 +149,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
 - (void)didDisconnectDevice:(CBPeripheral *)device error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
     //处理数据后发给JS
-    [self sendEventWithName:@"BlueToothDisConnected" body:self.connectDevice];
+    [self sendEventWithName:@"BlueToothDisConnected" body:self.connectDevice.cb];
 }
 
 

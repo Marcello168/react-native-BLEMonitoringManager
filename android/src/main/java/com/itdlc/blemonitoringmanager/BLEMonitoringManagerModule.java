@@ -53,6 +53,9 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     private static final String BlueToothDisConnected = "BlueToothDisConnected";//设备断开链接
     private static final String BlueToothConnectedSucess = "BlueToothConnectedSucess";//设备链接成功
 
+    private static final String BlueToothOpen = "BlueToothDisConnected";//设备断开链接
+    private static final String BlueToothClose = "BlueToothConnectedSucess";//设备链接成功
+
     private static final String E_PICKER_CANCELLED = "E_PICKER_CANCELLED";
     private static final String E_FAILED_TO_SHOW_PICKER = "E_FAILED_TO_SHOW_PICKER";
     private static final String E_NO_IMAGE_DATA_FOUND = "E_NO_IMAGE_DATA_FOUND";
@@ -144,8 +147,6 @@ commandByte[i] = (byte) commandData.getInt(i);
     }
 
 
-
-
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
@@ -156,22 +157,20 @@ commandByte[i] = (byte) commandData.getInt(i);
                 if (state == BluetoothAdapter.STATE_ON) {
 //                    scanLeDevice(true);
                     Log.i(TAG, "打开蓝牙 " + intent.getAction());
+                    sendEvent(reactContextjava,BlueToothOpen,connectMacAddress);
+
                 } else {
                     Log.i(TAG, "关闭蓝牙 " + intent.getAction());
-
+                    sendEvent(reactContextjava,BlueToothClose,connectMacAddress);
                 }
             } else {
                 switch (intent.getAction()) {
-
                     case LeProxy.ACTION_GATT_DISCONNECTED:// 断线
                         Log.i(TAG, "蓝牙 断线了 " + intent.getAction());
                         sendEvent(reactContextjava,BlueToothDisConnected,connectMacAddress);
-
                         break;
-
                     case LeProxy.ACTION_RSSI_AVAILABLE: {// 更新rssi
                         Log.i(TAG, "蓝牙 更新rssi " + intent.getAction());
-
                     }
                     break;
 
@@ -179,10 +178,8 @@ commandByte[i] = (byte) commandData.getInt(i);
                         Log.i(TAG, "蓝牙已连接 " + intent.getAction());//蓝牙连接后 马上停止扫描蓝牙
                         scanLeDevice(false);
                         sendEvent(reactContextjava,BlueToothConnectedSucess,connectMacAddress);
-
                     }
                     break;
-
                     case LeProxy.ACTION_DATA_AVAILABLE:// 接收到从机数据
                         displayRxData(intent);
                         break;
@@ -206,8 +203,7 @@ commandByte[i] = (byte) commandData.getInt(i);
                  int d = data[i] & 0xff;//Byte 转Int
                  writableArray.pushInt(d);
             }
-            sendEvent(reactContextjava,Monitoringttitudeata,writableArray);//发送数据给JS
-
+            sendEvent(reactContextjava,Monitoringttitudeata,writableArray);//发送数据给J
         }
 
 
