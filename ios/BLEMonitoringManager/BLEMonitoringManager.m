@@ -12,7 +12,7 @@
 
 @interface BLEMonitoringManager ()<BLEManagerDelegate>{
     NSMutableArray *_scanDevices;//扫描到的设备
-
+    
 }
 
 /** 蓝牙单例 */
@@ -29,13 +29,16 @@ RCT_EXPORT_MODULE(BLEMonitoringManager);
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"ScanDeviceListResult",@"Monitoringttitudeata",@"BlueToothDisConnected",@"BlueToothConnectedSucess"];
+    return @[@"ScanDeviceListResult",@"Monitoringttitudeata",@"BlueToothDisConnected",@"BlueToothConnectedSucess",@"BlueToothOpen",@"BlueToothClose"];
 }
 
 RCT_EXPORT_METHOD(shareBLEMonitoringManager){
     RCTLogInfo(@"创建单例蓝牙");
     _scanDevices = [NSMutableArray array];
+    [BLEManager defaultManager].isEncryption = NO;
+    
     BLEManager * manager = [BLEManager defaultManager];
+    
     manager.delegate = self;
     self.bleManager = manager;
     
@@ -44,14 +47,24 @@ RCT_EXPORT_METHOD(shareBLEMonitoringManager){
 RCT_EXPORT_METHOD(testPrint:(NSString *)name info:(NSDictionary *)info) {
     RCTLogInfo(@"%@: %@", name, info);
     [self.bleManager scanDeviceTime:3.0];
-
+    
 }
 
 /***开始搜索设备**/
 RCT_EXPORT_METHOD(startScanDevice ) {
+    [_scanDevices removeAllObjects];//开始搜索移出所有之前搜索到的设备
     [self.bleManager scanDeviceTime:3.0];
     
 }
+
+
+/***停止搜索设备**/
+RCT_EXPORT_METHOD(stopScanDevice ) {
+    [self.bleManager manualStopScanDevice];
+    
+}
+
+
 
 RCT_EXPORT_METHOD(connectDevice:(NSString *)macAddress) {
     
@@ -60,6 +73,11 @@ RCT_EXPORT_METHOD(connectDevice:(NSString *)macAddress) {
     [self.bleManager connectToDevice:connectDevcie.cb];
     
 }
+
+RCT_EXPORT_METHOD(disConnectDevice) {
+    [self.bleManager disconnectDevice:self.connectDevice.cb];
+}
+
 
 - (DeviceInfo *) getReadyConectPeriphera:(NSString *)macAddress{
     NSLog(@"getReadyConectPeriphera");
@@ -79,7 +97,9 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
     
     NSString *str = [DataTool convertArrayToHexStr:commandArray];
     NSLog(@"Send Hex Str -> %@", str);
-    [self.bleManager sendDataToDevice1:str device:self.connectDevice.macAddrss];
+    //    [self.bleManager sendDataToDevice1:str device:self.connectDevice.cb];
+    [[BLEManager defaultManager] sendDataToDevice1:str device:self.connectDevice.cb];
+    
     
 }
 
@@ -92,7 +112,13 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
 // */
 - (void)centerManagerStateChange:(CBCentralManager *)center{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    // *  @return state 0=未知   1=重置    2=不支持蓝牙4.0    3=未被授权   4= 手机蓝牙关闭   5=手机蓝牙打开
+    if (center.state == 4) {//蓝牙关闭
+        [self sendEventWithName:@"BlueToothClose" body:self.connectDevice.macAddrss];
+    }else if (center.state == 5){//蓝牙打开
+        [self sendEventWithName:@"BlueToothOpen" body:self.connectDevice.macAddrss];
+    }
+    
 }
 
 
@@ -115,13 +141,13 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
     }
     //处理数据后发给JS
     [self sendEventWithName:@"ScanDeviceListResult" body:devcieArray];
-
+    
 }
 
 - (void)bleManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
     
-
+    
 }
 
 
@@ -135,7 +161,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
 - (void)connectDeviceSuccess:(CBPeripheral *)device error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
     [self sendEventWithName:@"BlueToothConnectedSucess" body:self.connectDevice.macAddrss];
-
+    
 }
 
 
@@ -149,7 +175,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
 - (void)didDisconnectDevice:(CBPeripheral *)device error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
     //处理数据后发给JS
-    [self sendEventWithName:@"BlueToothDisConnected" body:self.connectDevice.cb];
+    [self sendEventWithName:@"BlueToothDisConnected" body:self.connectDevice.macAddrss];
 }
 
 
@@ -162,20 +188,10 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceDataSuccess_1:(NSData *)data device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-    NSString *hexStr =  [DataTool convertDataToHexStr:data];
-    NSLog(@"HexStr: = %@",hexStr);
-    Byte *commandByte = (Byte *)[data bytes];
-    NSMutableArray *commandArray = [NSMutableArray array];
-
-    for(int i=0;i<[data length];i++){
-      int cmd =  commandByte[i];
-        [commandArray addObject:@(cmd)];
-    }
-    //处理数据后发给JS
-    [self sendEventWithName:@"Monitoringttitudeata" body:commandArray];
-    NSLog(@"commandArray-> %@",commandArray);
-
+    
+    
 }
+
 
 
 
@@ -187,12 +203,12 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceDataSuccess_3:(NSData *)data device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 - (void)Receive_Data_EventfromModel:(NSData *)TXP p:(UInt8)len DEV:(CBPeripheral *)cb AndMarkId:(NSInteger)markId{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }//读取设备电池电量，此接口为防丢器专用
 
 /**
@@ -202,7 +218,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)didCanSelectOADFileWithFileType:(char)fileType{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -212,7 +228,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)returnSendOADFileProgressWith:(float)filePer{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -220,7 +236,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)returnSendOADSuccess{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -228,23 +244,23 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)returnSendOADFailure{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
-/**
- *  停止搜索回调
- */
-- (void)stopScanDevice{
-    NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
-}
+///**
+// *  停止搜索回调
+// */
+//- (void)stopScanDevice{
+//    NSLog(@"%s, %d", __FUNCTION__, __LINE__);
+//
+//}
 
 /**
  *  获取特征下的描述的值的回调(descriptor.value)
  */
 - (void)receiveDeviceDescriptorValue:(NSString *)data withCharacteristic:(CBCharacteristic *)characteristic peripheral:(CBPeripheral *)peripheral{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -252,7 +268,20 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)bleManagerPeripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    NSData *data = characteristic.value;
+    NSString *hexStr =  [DataTool convertDataToHexStr:data];
+    NSLog(@"HexStr: = %@",hexStr);
+    Byte *commandByte = (Byte *)[data bytes];
+    NSMutableArray *commandArray = [NSMutableArray array];
+    
+    for(int i=0;i<[data length];i++){
+        int cmd =  commandByte[i];
+        [commandArray addObject:@(cmd)];
+    }
+    //处理数据后发给JS
+    [self sendEventWithName:@"Monitoringttitudeata" body:commandArray];
+    NSLog(@"commandArray-> %@",commandArray);
+    
 }
 
 /**
@@ -260,7 +289,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)bleManagerPeripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -268,7 +297,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)bleManagerPeripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 
@@ -281,7 +310,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceVersion:(NSString *)version device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -292,7 +321,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceBattery:(NSInteger)battery device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -308,7 +337,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceUTFTime:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)monute second:(NSInteger)second device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -319,7 +348,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceChannelRate:(NSString *)rate device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -330,7 +359,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceTXPower:(NSString *)txPower device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -341,7 +370,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceSettingName:(NSString *)name device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -353,7 +382,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceSettingPassword:(NSString *)password device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -364,7 +393,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceAdvertInterval:(NSInteger)interval device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -375,7 +404,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceConnectInterval:(NSInteger)interval device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -386,7 +415,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceLatency:(NSInteger)interval device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -397,7 +426,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceConnectTimeOut:(NSInteger)interval device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -408,7 +437,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceAdvertData:(NSString *)dataStr device:(CBPeripheral *)device{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -416,7 +445,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)readDeviceRSSI:(CBPeripheral *)peripheral RSSI:(NSNumber *)RSSI{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 
@@ -426,7 +455,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceInfoModel:(NSString *)string withDevice:(CBPeripheral *)cb{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 /**
@@ -434,7 +463,7 @@ RCT_EXPORT_METHOD(sendDataToDevice:(NSArray*)commandArray) {
  */
 - (void)receiveDeviceInfomation:(NSString *)string withPeripheral:(CBPeripheral *)cb{
     NSLog(@"%s, %d", __FUNCTION__, __LINE__);
-
+    
 }
 
 

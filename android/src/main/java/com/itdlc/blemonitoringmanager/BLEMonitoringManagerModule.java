@@ -53,8 +53,8 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     private static final String BlueToothDisConnected = "BlueToothDisConnected";//设备断开链接
     private static final String BlueToothConnectedSucess = "BlueToothConnectedSucess";//设备链接成功
 
-    private static final String BlueToothOpen = "BlueToothDisConnected";//设备断开链接
-    private static final String BlueToothClose = "BlueToothConnectedSucess";//设备链接成功
+    private static final String BlueToothOpen = "BlueToothOpen";//设备断开链接
+    private static final String BlueToothClose = "BlueToothClose";//设备链接成功
 
     private static final String E_PICKER_CANCELLED = "E_PICKER_CANCELLED";
     private static final String E_FAILED_TO_SHOW_PICKER = "E_FAILED_TO_SHOW_PICKER";
@@ -70,7 +70,7 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     private ArrayList<LeDevice> mLeDevices;
     private LeProxy mLeProxy;
     private ReactApplicationContext reactContextjava;
-//    private String lastCommand;
+    //    private String lastCommand;
     private String connectMacAddress;
 
 
@@ -124,7 +124,15 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
     /***开始搜索设备**/
     @ReactMethod
     public void startScanDevice() {
+        mLeDevices = new ArrayList<>();
         scanLeDevice(true);
+
+    }
+
+    /***停止搜索设备**/
+    @ReactMethod
+    public void stopScanDevice() {
+        scanLeDevice(false);
 
     }
 
@@ -134,6 +142,16 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
         connectMacAddress = macAddress;
         mLeProxy.connect(macAddress, false);
     }
+
+
+    /***断开连接设备**/
+    @ReactMethod
+    public void disConnectDevice() {
+        mLeProxy.disconnect(connectMacAddress);
+    }
+
+
+
     /***开始连接设备**/
 
     @ReactMethod
@@ -141,7 +159,7 @@ public class BLEMonitoringManagerModule extends ReactContextBaseJavaModule imple
         byte[] commandByte = new byte[commandData.size()];
 
         for (int i = 0; i < commandData.size(); i++) {
-commandByte[i] = (byte) commandData.getInt(i);
+            commandByte[i] = (byte) commandData.getInt(i);
         }
         mLeProxy.send(connectMacAddress, commandByte);
     }
@@ -159,7 +177,7 @@ commandByte[i] = (byte) commandData.getInt(i);
                     Log.i(TAG, "打开蓝牙 " + intent.getAction());
                     sendEvent(reactContextjava,BlueToothOpen,connectMacAddress);
 
-                } else {
+                } else if (state == BluetoothAdapter.STATE_OFF) {
                     Log.i(TAG, "关闭蓝牙 " + intent.getAction());
                     sendEvent(reactContextjava,BlueToothClose,connectMacAddress);
                 }
@@ -188,23 +206,25 @@ commandByte[i] = (byte) commandData.getInt(i);
         }
     };
 
-        private void displayRxData(Intent intent) {
-            String address = intent.getStringExtra(LeProxy.EXTRA_ADDRESS);
-            String uuid = intent.getStringExtra(LeProxy.EXTRA_UUID);
-            byte[] data = intent.getByteArrayExtra(LeProxy.EXTRA_DATA);
-                String dataStr = "timestamp: " + TimeUtil.timestamp("MM-dd HH:mm:ss.SSS") + '\n'
-                        + "uuid: " + uuid + '\n'
-                        + "length: " + (data == null ? 0 : data.length) + '\n';
 
-                    dataStr += "data: " + DataUtil.byteArrayToHex(data) + '\n';
-            Log.i(TAG, "蓝牙 接收到数据 " +dataStr );
-            WritableArray writableArray = Arguments.createArray();
-            for (int i = 0; i < data.length; i++) {
-                 int d = data[i] & 0xff;//Byte 转Int
-                 writableArray.pushInt(d);
-            }
-            sendEvent(reactContextjava,Monitoringttitudeata,writableArray);//发送数据给J
+
+    private void displayRxData(Intent intent) {
+        String address = intent.getStringExtra(LeProxy.EXTRA_ADDRESS);
+        String uuid = intent.getStringExtra(LeProxy.EXTRA_UUID);
+        byte[] data = intent.getByteArrayExtra(LeProxy.EXTRA_DATA);
+        String dataStr = "timestamp: " + TimeUtil.timestamp("MM-dd HH:mm:ss.SSS") + '\n'
+                + "uuid: " + uuid + '\n'
+                + "length: " + (data == null ? 0 : data.length) + '\n';
+
+        dataStr += "data: " + DataUtil.byteArrayToHex(data) + '\n';
+        Log.i(TAG, "蓝牙 接收到数据 " +dataStr );
+        WritableArray writableArray = Arguments.createArray();
+        for (int i = 0; i < data.length; i++) {
+            int d = data[i] & 0xff;//Byte 转Int
+            writableArray.pushInt(d);
         }
+        sendEvent(reactContextjava,Monitoringttitudeata,writableArray);//发送数据给J
+    }
 
 
     /**
@@ -252,6 +272,8 @@ commandByte[i] = (byte) commandData.getInt(i);
 
         }
     };
+
+
 
 
     private final Runnable mScanRunnable = new Runnable() {
